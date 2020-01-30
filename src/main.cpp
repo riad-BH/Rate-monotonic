@@ -44,12 +44,11 @@ void setup()
 
 #endif // _SLOW_IT_DOWN
 
-  Scheduler scheduler(task_gps, task_gyro, task_wheel);
 
-  // Scheduler scheduler(0);
-  // scheduler.add_Task(task_gps);
-  // scheduler.add_Task(task_gyro);
-  // scheduler.add_Task(task_wheel);
+   Scheduler scheduler(0);
+   scheduler.add_Task(task_gps);
+   scheduler.add_Task(task_gyro);
+   scheduler.add_Task(task_wheel);
 
   for (;;)
   {
