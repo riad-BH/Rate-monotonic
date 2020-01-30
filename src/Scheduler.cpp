@@ -1,18 +1,18 @@
 /*
- * Copyright (c) 2020 Riad Benhalla [https://github.com/riad-BH/Rate-monotonic] 
- * 
+ * Copyright (c) 2020 Riad Benhalla [https://github.com/riad-BH/Rate-monotonic]
+ *
  * This file is part of Rate-monotonic.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -20,28 +20,29 @@
 
 #include "Scheduler.h"
 
-Scheduler::Scheduler(Task &task1, Task &task2, Task &task3) : state(IDLE), current_task_priority(0), time_elapsed(0),task_creator_number(2)
+Scheduler::Scheduler(Task &task1, Task &task2, Task &task3)
+    : state(IDLE), current_task_priority(0), time_elapsed(0),
+      task_creator_number(2)
 {
   task[0] = task1;
   task[1] = task2;
   task[2] = task3;
 }
 
-// Give any number you want it doesn't matter.
-Scheduler::Scheduler(uint8_t c) : state(IDLE), current_task_priority(0), time_elapsed(0),task_creator_number(0)
-{
-}
-
+Scheduler::Scheduler()
+    : state(IDLE), current_task_priority(0), time_elapsed(0),
+      task_creator_number(0) {}
 
 void Scheduler::add_Task(Task &task1)
 {
-  task[task_creator_number] = task1;
-  task_creator_number++;
+  if (task_creator_number < TASK_NUMBER)
+  {
+    task[task_creator_number] = task1;
+    task_creator_number++;
+  }
 }
 
-Scheduler::~Scheduler()
-{
-}
+Scheduler::~Scheduler() {}
 
 void Scheduler::schedule()
 {
@@ -59,7 +60,7 @@ void Scheduler::schedule()
     else
     {
       check_task_states();
-    }   
+    }
     update_task_states();
     time_elapsed += tick_size;
   }
@@ -132,15 +133,16 @@ void Scheduler::execute_task()
 {
   task[current_executing_task_number].updateExecutedTime(tick_size);
   display_scheduler_info(BUSY);
-  if (task[current_executing_task_number].getExecutedTime() == task[current_executing_task_number].getExecutionTime())
+  if (task[current_executing_task_number].getExecutedTime() ==
+      task[current_executing_task_number].getExecutionTime())
   {
     task[current_executing_task_number].updateExecutedTime(0, RESET);
     task[current_executing_task_number].updateState(SUSPENDED);
     state = IDLE;
     current_task_priority = 0;
   }
-  while(flag_tick == OFF){
-
+  while (flag_tick == OFF)
+  {
   }
 }
 
@@ -148,15 +150,16 @@ void Scheduler::execute_task(uint8_t &executing_task)
 {
   task[executing_task].updateExecutedTime(tick_size);
   display_scheduler_info(BUSY);
-  if (task[executing_task].getExecutedTime() == task[executing_task].getExecutionTime())
+  if (task[executing_task].getExecutedTime() ==
+      task[executing_task].getExecutionTime())
   {
     task[executing_task].updateExecutedTime(0, RESET);
     task[executing_task].updateState(SUSPENDED);
     state = IDLE;
     current_task_priority = 0;
   }
-  while(flag_tick == OFF){
-
+  while (flag_tick == OFF)
+  {
   }
 }
 
@@ -169,7 +172,7 @@ void Scheduler::display_scheduler_info(const uint8_t status)
     Serial.print(time_elapsed);
     Serial.print("-");
     Serial.print(time_elapsed + tick_size);
-    Serial.println(" ms");   
+    Serial.println(" ms");
   }
   else
   {

@@ -33,6 +33,7 @@ void setup()
 
 #if defined(_SLOW_IT_DOWN)
 
+  // task_name, priority, period, execution_time
   Task task_gps("#Gyro", 3, 1000, 600);
   Task task_gyro("&Counter", 2, 3000, 600);
   Task task_wheel("@GPS", 1, 6000, 800);
@@ -45,7 +46,7 @@ void setup()
 #endif // _SLOW_IT_DOWN
 
 
-   Scheduler scheduler(0);
+   Scheduler scheduler;
    scheduler.add_Task(task_gps);
    scheduler.add_Task(task_gyro);
    scheduler.add_Task(task_wheel);
