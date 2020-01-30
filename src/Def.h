@@ -32,7 +32,7 @@
 
 #define IDLE 0
 #define BUSY 1
-//#define _SLOW_IT_DOWN
+#define _SLOW_IT_DOWN
 
 #if defined(_SLOW_IT_DOWN)
 
